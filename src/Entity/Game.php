@@ -14,13 +14,19 @@ class Game {
 
 		$total = 0;
 		foreach ($ratings as $rating) {
+			$score = $rating->getScore();
+			if ($score === null) {
+				$numRatings--;
+				continue;
+			}
 			$total += $rating->getScore();
 		}
 		return $total / $numRatings;
 	}
 
-	public function isRecommended() {
-		return $this->getAverageScore() >= 3;
+	public function isRecommended($user) {
+		$compatibility = $user->getGenreCompatibility($this->getGenreCode());
+		return $this->getAverageScore() / 10 * $compatibility >= 3;
 	}
 
 	public function getTitle() {
